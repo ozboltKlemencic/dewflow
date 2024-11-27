@@ -1,4 +1,3 @@
-import image from "next/image";
 import Link from "next/link";
 
 import QuestionCard from "@/components/cards/QuestionCard";
