@@ -33,7 +33,7 @@ export async function GET(
   }
 }
 
-// DELETE users by id api/users/[id]
+// DELETE users by id api/accounts/[id]
 export async function DELETE(
   _: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -59,7 +59,7 @@ export async function DELETE(
   }
 }
 
-// PUT-update users by id api/users/[id]
+// PUT-update users by id api/accounts/[id]
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
