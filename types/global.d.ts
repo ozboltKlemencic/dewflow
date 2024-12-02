@@ -23,7 +23,7 @@ interface Question {
 }
 
 type ActionResponse<T = null> = {
-  succes: boolean;
+  success: boolean;
   data?: T;
   error: {
     message: string;
@@ -32,8 +32,8 @@ type ActionResponse<T = null> = {
   status?: number;
 };
 
-type SuccesResponse<T = null> = ActionResponse<T> & { succes: true };
-type ErrorResponse = ActionResponse<undefined> & { succes: false };
+type SuccesResponse<T = null> = ActionResponse<T> & { success: true };
+type ErrorResponse = ActionResponse<undefined> & { success: false };
 
 type APIErrorResponse = NextResponse<ErrorResponse>;
 type APIResponse<T = null> = NextResponse<SuccesResponse<T> | ErrorResponse>;

@@ -27,7 +27,7 @@ export async function GET(
       throw new NotFoundError("User");
     }
 
-    return NextResponse.json({ succes: true, data: user }, { status: 200 });
+    return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
     return handleError(error, "api") as APIResponse;
   }
@@ -53,7 +53,7 @@ export async function DELETE(
       throw new NotFoundError("User");
     }
 
-    return NextResponse.json({ succes: true, data: user }, { status: 200 });
+    return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
     return handleError(error, "api") as APIResponse;
   }
@@ -85,7 +85,7 @@ export async function PUT(
     }
 
     return NextResponse.json(
-      { succes: true, data: updatedUser },
+      { success: true, data: updatedUser },
       { status: 200 }
     );
   } catch (error) {

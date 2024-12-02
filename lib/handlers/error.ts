@@ -13,7 +13,7 @@ const formatResponse = (
   errors?: Record<string, string[]> | undefined
 ) => {
   const responseContent = {
-    succes: false,
+    success: false,
     error: { message, details: errors },
   };
   return responseType === "api"

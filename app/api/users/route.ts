@@ -13,7 +13,7 @@ export async function GET() {
 
     const users = await User.find();
 
-    return NextResponse.json({ succes: true, data: users }, { status: 200 });
+    return NextResponse.json({ success: true, data: users }, { status: 200 });
   } catch (error) {
     return handleError(error, "api") as APIResponse;
   }
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     }
     const newUser = await User.create(validatedData.data);
 
-    return NextResponse.json({ succes: true, data: newUser }, { status: 201 });
+    return NextResponse.json({ success: true, data: newUser }, { status: 201 });
   } catch (error) {
     return handleError(error, "api") as APIResponse;
   }

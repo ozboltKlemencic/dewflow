@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       throw new NotFoundError("User");
     }
 
-    return NextResponse.json({ succes: true, data: user }, { status: 200 });
+    return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
     handleError(error, "api") as APIResponse;
   }
