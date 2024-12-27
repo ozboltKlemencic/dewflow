@@ -2,13 +2,17 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MDXEditorMethods } from "@mdxeditor/editor";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import dynamic from "next/dynamic";
-import React, { useRef } from "react";
+import { useRouter } from "next/navigation";
+import React, { useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Input } from "@/components/ui/input";
-import { AskQuestionSchema, AskQuestionSchema } from "@/lib/validations";
+import ROUTES from "@/constants/routes";
+import { toast } from "@/hooks/use-toast";
+import { createQuestion } from "@/lib/actions/question.action";
+import { AskQuestionSchema } from "@/lib/validations";
 
 import TagCard from "../cards/TagCard";
 import { Button } from "../ui/button";
@@ -19,18 +23,26 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "../ui/form";
+import { Input } from "../ui/input";
 
 const Editor = dynamic(() => import("@/components/editor"), {
-  // Make sure we turn SSR off
   ssr: false,
 });
 
 const QuestionForm = () => {
-  const editoRef = useRef<MDXEditorMethods>(null);
+  const router = useRouter();
+  const editorRef = useRef<MDXEditorMethods>(null);
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
-    defaultValues: { title: "", content: "", tags: [] },
+    defaultValues: {
+      title: "",
+      content: "",
+      tags: [],
+    },
   });
 
   const handleInputKeyDown = (
@@ -66,12 +78,34 @@ const QuestionForm = () => {
     form.setValue("tags", newTags);
 
     if (newTags.length === 0) {
-      form.setError("tags", { type: "manual", message: "Tags are required" });
+      form.setError("tags", {
+        type: "manual",
+        message: "Tags are required",
+      });
     }
   };
 
-  const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
-    console.log(data);
+  const handleCreateQuestion = async (
+    data: z.infer<typeof AskQuestionSchema>
+  ) => {
+    startTransition(async () => {
+      const result = await createQuestion(data);
+
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Question created successfully",
+        });
+
+        if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+      } else {
+        toast({
+          title: `Error ${result.status}`,
+          description: result.error?.message || "Something went wrong",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   return (
@@ -85,8 +119,8 @@ const QuestionForm = () => {
           name="title"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-medium text-dark400_light800">
-                Question titile <span className="text-primary-500">*</span>
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Question Title <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
                 <Input
@@ -96,42 +130,42 @@ const QuestionForm = () => {
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Be specific and imagine you&apos;re asking a question to another
-                person
+                person.
               </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="content"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-medium text-dark400_light800">
-                Detailed explanation of your problem
+              <FormLabel className="paragraph-semibold text-dark400_light800">
+                Detailed explanation of your problem{" "}
                 <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
                 <Editor
                   value={field.value}
-                  editorRef={editoRef}
+                  editorRef={editorRef}
                   fieldChange={field.onChange}
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Introduce the problem and expand on what you&apos;ve put in the
-                titile.
+                title.
               </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="tags"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col gap-3">
-              <FormLabel className="paragraph-medium text-dark400_light800">
+              <FormLabel className="paragraph-semibold text-dark400_light800">
                 Tags <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
@@ -143,7 +177,7 @@ const QuestionForm = () => {
                   />
                   {field.value.length > 0 && (
                     <div className="flex-start mt-2.5 flex-wrap gap-2.5">
-                      {field.value?.map((tag: string) => (
+                      {field?.value?.map((tag: string) => (
                         <TagCard
                           key={tag}
                           _id={tag}
@@ -162,6 +196,7 @@ const QuestionForm = () => {
                 Add up to 3 tags to describe what your question is about. You
                 need to press enter to add a tag.
               </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -169,9 +204,17 @@ const QuestionForm = () => {
         <div className="mt-16 flex justify-end">
           <Button
             type="submit"
+            disabled={isPending}
             className="primary-gradient w-fit !text-light-900"
           >
-            Ask A Question
+            {isPending ? (
+              <>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                <span>Submitting</span>
+              </>
+            ) : (
+              <>Ask A Question</>
+            )}
           </Button>
         </div>
       </form>

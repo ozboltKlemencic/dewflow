@@ -1,4 +1,3 @@
-import { Content } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -11,7 +10,7 @@ import { Badge } from "../ui/badge";
 interface Props {
   _id: string;
   name: string;
-  questions: number;
+  questions?: number;
   showCount?: boolean;
   compact?: boolean;
   remove?: boolean;
@@ -42,6 +41,7 @@ const TagCard = ({
           <i className={`${iconClass} text-sm`}></i>
           <span>{name}</span>
         </div>
+
         {remove && (
           <Image
             src="/icons/close.svg"
