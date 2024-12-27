@@ -2,18 +2,18 @@ import { model, models, Schema, Types } from "mongoose";
 
 export interface IVote {
   author: Types.ObjectId;
-  id: Types.ObjectId;
-  type: "question" | "answear";
+  actionId: Types.ObjectId;
+  actionType: "question" | "answer";
   voteType: "upvote" | "downvote";
 }
 
 export interface IVoteDoc extends IVote, Document {}
 const VoteSchema = new Schema<IVote>(
   {
-    author: { type: Schema.Types.ObjectId, require: true, ref: "User" },
-    id: { type: Schema.Types.ObjectId, require: true },
-    type: { type: String, require: true, enum: ["question", "answear"] },
-    voteType: { type: String, require: true, enum: ["upvote", "downvote"] },
+    author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    actionId: { type: Schema.Types.ObjectId, required: true },
+    actionType: { type: String, enum: ["question", "answer"], required: true },
+    voteType: { type: String, enum: ["upvote", "downvote"], required: true },
   },
   { timestamps: true }
 );

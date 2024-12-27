@@ -24,17 +24,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             email
           )) as ActionResponse<IAccountDoc>;
 
-          if (!existingAccount) {
-            return null;
-          }
+          if (!existingAccount) return null;
 
           const { data: existingUser } = (await api.users.getById(
             existingAccount.userId.toString()
           )) as ActionResponse<IUserDoc>;
 
-          if (!existingUser) {
-            return null;
-          }
+          if (!existingUser) return null;
 
           const isValidPassword = await bcrypt.compare(
             password,
@@ -88,7 +84,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         username:
           account.provider === "github"
             ? (profile?.login as string)
-            : (user?.name?.toLocaleLowerCase() as string),
+            : (user.name?.toLowerCase() as string),
       };
 
       const { success } = (await api.auth.oAuthSignIn({
@@ -98,6 +94,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       })) as ActionResponse;
 
       if (!success) return false;
+
       return true;
     },
   },

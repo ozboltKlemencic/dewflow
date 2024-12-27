@@ -1,8 +1,6 @@
-import { ActionResponse } from "@/types/global";
-
+import { RequestError } from "../http-errors";
 import logger from "../logger";
 import handleError from "./error";
-import { RequestError } from "../https-errors";
 
 interface FetchOptions extends RequestInit {
   timeout?: number;
@@ -51,9 +49,9 @@ export async function fetchHandler<T>(
     const error = isError(err) ? err : new Error("Unknown error");
 
     if (error.name === "AbortError") {
-      logger.warn(`Request tp ${url} timed out`);
+      logger.warn(`Request to ${url} timed out`);
     } else {
-      logger.error(`Error fetching ${url}:${error.message}`);
+      logger.error(`Error fetching ${url}: ${error.message}`);
     }
 
     return handleError(error) as ActionResponse<T>;

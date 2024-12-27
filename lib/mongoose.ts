@@ -1,6 +1,7 @@
 import mongoose, { Mongoose } from "mongoose";
 
 import logger from "./logger";
+import "@/database";
 
 const MONGODB_URI = process.env.MONGODB_URI as string;
 
@@ -14,6 +15,7 @@ interface MongooseCache {
 }
 
 declare global {
+  // eslint-disable-next-line no-var
   var mongoose: MongooseCache;
 }
 
@@ -25,13 +27,15 @@ if (!cached) {
 
 const dbConnect = async (): Promise<Mongoose> => {
   if (cached.conn) {
-    logger.info("Using existing mongoose conection");
+    logger.info("Using existing mongoose connection");
     return cached.conn;
   }
 
   if (!cached.promise) {
     cached.promise = mongoose
-      .connect(MONGODB_URI, { dbName: "dewflow" })
+      .connect(MONGODB_URI, {
+        dbName: "devflow",
+      })
       .then((result) => {
         logger.info("Connected to MongoDB");
         return result;

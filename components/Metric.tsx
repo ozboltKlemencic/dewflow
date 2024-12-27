@@ -5,12 +5,12 @@ import React from "react";
 interface Props {
   imgUrl: string;
   alt: string;
-  value: number | string;
+  value: string | number;
   title: string;
-  textStyles: string;
-  imageStyles?: string;
-  isAuthor?: boolean;
   href?: string;
+  textStyles: string;
+  imgStyles?: string;
+  isAuthor?: boolean;
 }
 
 const Metric = ({
@@ -18,9 +18,9 @@ const Metric = ({
   alt,
   value,
   title,
-  textStyles,
-  imageStyles,
   href,
+  textStyles,
+  imgStyles,
   isAuthor,
 }: Props) => {
   const metricContent = (
@@ -30,8 +30,9 @@ const Metric = ({
         width={16}
         height={16}
         alt={alt}
-        className={`rounded-full object-contain ${imageStyles}`}
+        className={`rounded-full object-contain ${imgStyles}`}
       />
+
       <p className={`${textStyles} flex items-center gap-1`}>
         {value}
 

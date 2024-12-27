@@ -29,6 +29,7 @@ const NavLinks = ({
           if (userId) item.route = `${item.route}/${userId}`;
           else return null;
         }
+
         const LinkComponent = (
           <Link
             href={item.route}

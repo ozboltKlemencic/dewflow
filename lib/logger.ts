@@ -16,7 +16,9 @@ const logger = pino({
           },
         }
       : undefined,
-  formatters: { level: (label) => ({ level: label.toUpperCase() }) },
+  formatters: {
+    level: (label) => ({ level: label.toUpperCase() }),
+  },
   timestamp: pino.stdTimeFunctions.isoTime,
 });
 

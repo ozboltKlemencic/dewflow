@@ -13,7 +13,7 @@ const SocialAuthForm = () => {
   const buttonClass =
     "background-dark400_light900 body-medium text-dark200_light800 min-h-12 flex-1 rounded-2 px-4 py-3.5";
 
-  const handleSignIN = async (provider: "github" | "google") => {
+  const handleSignIn = async (provider: "github" | "google") => {
     try {
       await signIn(provider, {
         callbackUrl: ROUTES.HOME,
@@ -23,21 +23,22 @@ const SocialAuthForm = () => {
       console.log(error);
 
       toast({
-        title: "Sign-in failed",
+        title: "Sign-in Failed",
         description:
           error instanceof Error
             ? error.message
-            : "An error occured diring sign-in",
+            : "An error occured during sign-in",
         variant: "destructive",
       });
     }
   };
+
   return (
     <div className="mt-10 flex flex-wrap gap-2.5">
-      <Button className={buttonClass} onClick={() => handleSignIN("github")}>
+      <Button className={buttonClass} onClick={() => handleSignIn("github")}>
         <Image
           src="/icons/github.svg"
-          alt="Github logo"
+          alt="Github Logo"
           width={20}
           height={20}
           className="invert-colors mr-2.5 object-contain"
@@ -45,10 +46,10 @@ const SocialAuthForm = () => {
         <span>Log in with GitHub</span>
       </Button>
 
-      <Button className={buttonClass} onClick={() => handleSignIN("google")}>
+      <Button className={buttonClass} onClick={() => handleSignIn("google")}>
         <Image
           src="/icons/google.svg"
-          alt="Github logo"
+          alt="Google Logo"
           width={20}
           height={20}
           className="mr-2.5 object-contain"

@@ -12,7 +12,7 @@ interface Props {
 }
 
 const QuestionCard = ({
-  question: { _id, title, tags, author, upvotes, answers, views, createdAt },
+  question: { _id, title, tags, author, createdAt, upvotes, answers, views },
 }: Props) => {
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
@@ -21,6 +21,7 @@ const QuestionCard = ({
           <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
             {getTimeStamp(createdAt)}
           </span>
+
           <Link href={ROUTES.QUESTION(_id)}>
             <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
               {title}
@@ -45,6 +46,7 @@ const QuestionCard = ({
           textStyles="body-medium text-dark400_light700"
           isAuthor
         />
+
         <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
           <Metric
             imgUrl="/icons/like.svg"
@@ -53,15 +55,13 @@ const QuestionCard = ({
             title=" Votes"
             textStyles="small-medium text-dark400_light800"
           />
-
           <Metric
             imgUrl="/icons/message.svg"
             alt="answers"
             value={answers}
-            title=" Answears"
+            title=" Answers"
             textStyles="small-medium text-dark400_light800"
           />
-
           <Metric
             imgUrl="/icons/eye.svg"
             alt="views"

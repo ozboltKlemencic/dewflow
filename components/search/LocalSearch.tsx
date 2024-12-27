@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { formUrlQuery, removeKeysFromUrlQuery } from "@/lib/url";
 
@@ -31,6 +31,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
           key: "query",
           value: searchQuery,
         });
+
         router.push(newUrl, { scroll: false });
       } else {
         if (pathname === route) {
@@ -38,6 +39,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
             params: searchParams.toString(),
             keysToRemove: ["query"],
           });
+
           router.push(newUrl, { scroll: false });
         }
       }
@@ -45,6 +47,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery, router, route, searchParams, pathname]);
+
   return (
     <div
       className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}
@@ -61,9 +64,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
         type="text"
         placeholder={placeholder}
         value={searchQuery}
-        onChange={(e) => {
-          setSearchQuery(e.target.value);
-        }}
+        onChange={(e) => setSearchQuery(e.target.value)}
         className="paragraph-regular no-focus placeholder text-dark400_light700 border-none shadow-none outline-none"
       />
     </div>
