@@ -312,8 +312,6 @@ export async function incrementViews(
 
     await question.save();
 
-    revalidatePath(ROUTES.QUESTION(questionId));
-
     return { success: true, data: { views: question.views } };
   } catch (error) {
     handleError(error) as ErrorResponse;
