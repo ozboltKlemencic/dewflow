@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { Question } from "@/database";
+
 export const SignInSchema = z.object({
   email: z
     .string()
@@ -144,4 +146,8 @@ export const PaginatedSearchParamsSchema = z.object({
 
 export const GetTagQuestionsSchema = PaginatedSearchParamsSchema.extend({
   tagId: z.string().min(1, { message: "Tag ID is required." }),
+});
+
+export const IncrementViewsSchema = z.object({
+  questionId: z.string().min(1, { message: "Question Id is required" }),
 });
