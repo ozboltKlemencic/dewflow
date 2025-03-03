@@ -2,11 +2,7 @@
 
 import { IAnswerDoc } from "@/database/answer.model";
 import action from "../handlers/action";
-import {
-  AnswerServerSchema,
-  GetAnswerSchema,
-  GetAnswerSchema,
-} from "../validations";
+import { AnswerServerSchema, GetAnswerSchema } from "../validations";
 import handleError from "../handlers/error";
 import mongoose, { Error } from "mongoose";
 import { Question } from "@/database";

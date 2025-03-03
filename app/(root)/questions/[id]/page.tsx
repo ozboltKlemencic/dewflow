@@ -13,6 +13,7 @@ import { View } from "lucide-react";
 import { after } from "next/server";
 import AnswerForm from "@/components/forms/AnswerForm";
 import { getAnswers } from "@/lib/actions/answer.action";
+import AllAnswers from "@/components/answers/AllAnswers";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -34,8 +35,6 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     pageSize: 10,
     filter: "latest",
   });
-
-  console.log("ANSWERS", answerResult);
 
   const { author, content, createdAt, title, answers, views, tags } = question;
   return (
@@ -100,6 +99,15 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           />
         ))}
       </div>
+
+      <section className="my-5 ">
+        <AllAnswers
+          data={answerResult?.answers}
+          success={areAnswersLoaded}
+          error={answersError}
+          totalAnswers={answerResult?.totalAnswers || 0}
+        />
+      </section>
 
       <section className="my-5">
         <AnswerForm questionId={question._id} />
