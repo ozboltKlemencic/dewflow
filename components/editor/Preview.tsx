@@ -10,7 +10,7 @@ Code.theme = {
 const Preview = ({ content = "" }: { content: string }) => {
   const formatedContent = content.replace(/\\/g, "").replace(/&#x20;/g, "");
   return (
-    <section className="markdown prose grid break-words">
+    <section className="markdown prose grid break-words break-all">
       <MDXRemote
         source={formatedContent}
         components={{
@@ -18,7 +18,7 @@ const Preview = ({ content = "" }: { content: string }) => {
             <Code
               {...props}
               lineNumbers
-              className="shadow-light-200 dark:shadow-dark-200"
+              className="shadow-light-200 dark:shadow-dark-200 "
             />
           ),
         }}
