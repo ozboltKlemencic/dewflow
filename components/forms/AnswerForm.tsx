@@ -19,19 +19,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { useReducer, useRef, useState } from "react";
+import { useReducer, useRef, useState, useTransition } from "react";
 import { AnswerSchema } from "@/lib/validations";
 import dynamic from "next/dynamic";
 import { MDXEditor, MDXEditorMethods } from "@mdxeditor/editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { createAnswer } from "@/lib/actions/answer.action";
+import { toast } from "@/hooks/use-toast";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const AnswerForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const AnswerForm = ({ questionId }: { questionId: string }) => {
+  const [isAnswearing, startAnswearingTransition] = useTransition();
   const [isAiSubmitting, setIsAiSubmitting] = useState(false);
 
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -42,7 +44,26 @@ const AnswerForm = () => {
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-    console.log(values);
+    startAnswearingTransition(async () => {
+      const result = await createAnswer({
+        questionId,
+        content: values.content,
+      });
+      if (result.success) {
+        form.reset();
+
+        toast({
+          title: "Success",
+          description: "Answer posted successfully",
+        });
+      } else {
+        toast({
+          title: "An Error occurred while posting your answer",
+          description: result?.error?.message,
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   return (
@@ -97,7 +118,7 @@ const AnswerForm = () => {
 
           <div className="flex justify-end ">
             <Button type="submit" className="primary-gradient w-fit">
-              {isSubmitting ? (
+              {isAnswearing ? (
                 <>
                   <ReloadIcon className="mr-2 size-4 animate-spin" /> Posting...
                 </>
