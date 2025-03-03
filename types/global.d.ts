@@ -50,3 +50,10 @@ interface PaginatedSearchParams {
   filter?: string;
   sort?: string;
 }
+
+interface Answear {
+  _id: string;
+  author: Author;
+  content: string;
+  createdAt: Date;
+}
