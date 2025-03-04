@@ -203,6 +203,8 @@ export async function getQuestion(
     return handleError(validationResult) as ErrorResponse;
   }
 
+  console.log(validationResult);
+
   const { questionId } = validationResult.params!;
 
   try {
